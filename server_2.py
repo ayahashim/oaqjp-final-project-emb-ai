@@ -1,36 +1,30 @@
-from flask import Flask, request, render_template
-
+from flask import Flask, request, render_template, url_for
+from EmotionDetection.emotion_detection import emotion_detector
+import requests
 app = Flask(__name__)
 
 @app.route("/emotionDetector")
 def emotion_detection():
-    response = request.args.get("textToAnalyze")
-   
-    if response.status_code == 200:
-        if response["dominant_emotion"] == None:
-            return "Invalid text! Please try again!."
-        else:
-            return f"""The system output is: 'anger':{ response['anger']}, 
-                'disgust': {response['disgust']}, 
-                'fear':{response["fear"]}, 
-                'joy': {response["joy"]}, 
-                'sadness': {response["sadness"]}, 
-                'dominant_emotion': {response["dominant_emotion"]}."""
-    elif response.status_code == 400:
-        return f"""The system output is: 'anger':{ None}, 
-                'disgust': {None}, 
-                'fear':{None}, 
-                'joy': {None}, 
-                'sadness': {None}, 
-                'dominant_emotion': {None}."""
+    text = request.args.get("textToAnalyze")
+    output = emotion_detector(text)
     
+    if output["dominant_emotion"] == None:
+        return " Invalid text! Please try again!."
     else:
-        return "Invalid input! please try again"
-
-# @app.route("/")
-# def render_index_page():
-#     return render_template("index.html")
+        return f"""For the given statement, the system response is 
+                'anger':{ output['anger']}, 
+                'disgust': {output['disgust']}, 
+                'fear':{output["fear"]}, 
+                'joy': {output["joy"]}, 
+                'sadness': {output["sadness"]}, 
+                'dominant_emotion': {output["dominant_emotion"]}."""
+   
+   
+@app.route("/")
+def render_index_page():
+    return render_template("index.html")
     
 if __name__ == "__main__":
-    app.run(debug=True)   
+    app.run(debug=True) 
+    app.run(host = "0.0.0.0", port = 5000)  
     

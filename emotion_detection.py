@@ -6,19 +6,19 @@ def emotion_detector(text_to_analyse):
     myobj =  { "raw_document": { "text": text_to_analyse } }
     response = requests.post(url, json = myobj, headers = header)
  
-    response = json.loads(response.text)
+    out = json.loads(response.text)
    
     highest_score = 0
     dominant_emotion=""
-    for emotion, score in response["emotionPredictions"][0]["emotion"].items():
+    for emotion, score in out["emotionPredictions"][0]["emotion"].items():
         if score > highest_score:
             highest_score= score
             dominant_emotion = emotion
-    output = response["emotionPredictions"][0]["emotion"]
+    output = out["emotionPredictions"][0]["emotion"]
     output.update({'dominant_emotion': dominant_emotion})
    
 
-    return output
+    return output, response
 
 
 
