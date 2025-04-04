@@ -3,7 +3,6 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 
 @app.route("/emotionDetector")
-
 def emotion_detection():
     response = request.args.get("textToAnalyze")
    
@@ -28,8 +27,10 @@ def emotion_detection():
     else:
         return "Invalid input! please try again"
 
-@app.route("/")
-def render_index_page():
-    return reneder_template("index.html")
+# @app.route("/")
+# def render_index_page():
+#     return render_template("index.html")
+    
 if __name__ == "__main__":
-    app.run(host = "0.0.0.0", port = 5000)
+    app.run(debug=True)   
+    
